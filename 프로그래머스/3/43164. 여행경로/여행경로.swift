@@ -2,28 +2,26 @@ import Foundation
 
 func solution(_ tickets:[[String]]) -> [String] {
     var graph = [String: [String]]()
-    var result = [String]()
     
     for ticket in tickets {
-        let from = ticket[0]
-        let to = ticket[1]
-        graph[from, default: []].append(to)
+        graph[ticket[0], default: []].append(ticket[1])
     }
     
     for key in graph.keys {
-        graph[key]?.sort(by: >)
+        graph[key]?.sort()
     }
     
+    var route = [String]()
+    
     func dfs(_ airport: String) {
-        while let destinations = graph[airport], !destinations.isEmpty {
-            let next = graph[airport]!.removeLast()
+        while let next = graph[airport]?.first {
+            graph[airport]?.removeFirst()
             dfs(next)
         }
-        result.append(airport)
+        route.append(airport)
     }
     
     dfs("ICN")
-    
-    return result.reversed()
+    return route.reversed()
 }
 
